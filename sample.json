@@ -1,0 +1,30 @@
+{
+  "Platform": {
+    "Azure": {
+      "Tenant": {
+        "id": "",
+        "displayName": "",
+        "domains": [ "" ],
+        "Subscriptions": [
+          {
+            "id": "",
+            "displayName": "",
+            "Resources": {
+              "AutomationAccounts": [
+                {
+                  "name": "",
+                  "locatoin": "",
+                  "tags": {},
+                  "SkuName": "",
+                  "DisableLocalAuth": false,
+                  "PublicNetworkAccess": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "DeploymentLanguage": ""
+    }
+  }
+}
