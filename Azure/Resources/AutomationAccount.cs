@@ -24,30 +24,46 @@ namespace MCD.Azure.Resources
         public List<Tag> Tags { get; set; }
         [Required]
         [Display(Name = "SkuName")]
+        [DefaultValue("Basic")]
         public string SkuName { get; set; }
         [DefaultValue(false)]
         public bool DisableLocalAuth { get; set; }
         [DefaultValue(true)]
         public bool PublicNetworkAccess { get; set; }
-        public string ToHcl(string ResourceGroup, string Source, string BuildId, string DeviceId)
+        [Required]
+        public string ResourceGroup { get; set; }
+        public string ToString(params string[] args)
         {
-            var buffer = new StringBuilder();
-            string ModuleName = "aa-" + DeviceId + this.Name + "-" + BuildId;
+            string TemplateLanguagee = args[0];
+            string Source = args[1];
+            string DeploymentId = args[2];
 
-            buffer.AppendLine($"module \"{ModuleName}\" {{");
-            buffer.AppendLine($"  source          = \"{Source}\"");
-            buffer.AppendLine("");
-            buffer.AppendLine($"  rsg             = azurerm_resource_group.rsg-{ResourceGroup}-{BuildId}.name");
-            buffer.AppendLine($"  coreDevice      = \"{DeviceId}\"");
-            buffer.AppendLine($"  customSuffix    = \"{this.Name}\"");
-            buffer.AppendLine("");
-            buffer.AppendLine($"  location        = \"{this.Location}\"");
-            buffer.AppendLine("");
-            buffer.AppendLine("  environment     = var.environment");
-            buffer.AppendLine("  tag_buildby     = var.buildby");
-            buffer.AppendLine("  tag_buildticket = var.buildticket");
-            buffer.AppendLine("  tag_builddate   = var.builddate");
-            buffer.AppendLine("}}");
+            StringBuilder buffer = new StringBuilder();
+
+            switch (TemplateLanguagee.ToLower())
+            {
+                case "terraform":
+                        string ModuleName = "aa-" + this.Name + "-" + DeploymentId;
+
+                        buffer.AppendLine($"module \"{ModuleName}\" {{");
+                        buffer.AppendLine($"  source = \"{Source}\"");
+                        buffer.AppendLine("");
+                        buffer.AppendLine($"  name                = \"{this.Name}\"");
+                        buffer.AppendLine($"  location            = \"{this.Location}\"");
+                        buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
+                        buffer.AppendLine("");
+                        buffer.AppendLine($"  skuName             = \"{this.SkuName}\"");
+                        buffer.AppendLine("");
+                        buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
+                        buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
+                        buffer.AppendLine("");
+                        buffer.AppendLine($"  tags                = {this.Tags}");
+                        buffer.AppendLine("");
+                        buffer.AppendLine("}");
+                    break;
+                case "arm":
+                    break;
+            }
 
             return buffer.ToString();
         }
