@@ -7,7 +7,7 @@ namespace MCD
     {
         public Platform()
         {
-
+            Azure = new();
         }
         public Azure.Azure Azure { get; set; }
     }
