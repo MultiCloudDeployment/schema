@@ -16,7 +16,7 @@ namespace MCD.Azure.Resources
         const bool DefaultPublicNetworkAccess = true;
         public AutomationAccount()
         {
-            SkuName = SkuName.Basic;
+            SkuName = Sku.Basic;
             DisableLocalAuth = DefaultDisableLocalAuth;
             PublicNetworkAccess = DefaultPublicNetworkAccess;
         }
@@ -36,15 +36,15 @@ namespace MCD.Azure.Resources
         public List<Tag> Tags { get; set; }
         [Required]
         [DefaultValue("Basic")]
-        private SkuName _SkuName { get; set; }
-        public SkuName SkuName
+        private Sku _SkuName { get; set; }
+        public Sku SkuName
         {
             get => _SkuName;
             set
             {
                 if (value == null)
                 {
-                    _SkuName = SkuName.Basic;
+                    _SkuName = Sku.Basic;
                 } else
                 {
                     _SkuName = value;
@@ -106,7 +106,7 @@ namespace MCD.Azure.Resources
                         buffer.AppendLine($"  location            = \"{this.Location}\"");
                         buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
                         buffer.AppendLine("");
-                        buffer.AppendLine($"  skuName             = \"{this.SkuName.Value}\"");
+                        buffer.AppendLine($"  skuName             = \"{this.SkuName.Name}\"");
                         buffer.AppendLine("");
                         buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
                         buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
@@ -125,12 +125,12 @@ namespace MCD.Azure.Resources
         {
             return new AutomationAccount(json);
         }
-    }
-    public class SkuName
-    {
-        private SkuName(string value) { Value = value; }
-        public string Value { get; private set; }
-        public static SkuName Basic { get { return new SkuName("Basic"); } }
-        public static SkuName Free { get { return new SkuName("Free"); } }
+        public class Sku
+        {
+            private Sku(string value) { Name = value; }
+            public string Name { get; private set; }
+            public static Sku Basic { get { return new Sku("Basic"); } }
+            public static Sku Free { get { return new Sku("Free"); } }
+        }
     }
 }
