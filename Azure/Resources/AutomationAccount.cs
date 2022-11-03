@@ -86,15 +86,15 @@ namespace MCD.Azure.Resources
         }
         [Required]
         public string ResourceGroup { get; set; }
-        public string ToString(params string[] args)
+        public string ToString(Azure.DeploymentType deploymentType, string deploymentId)
         {
-            string TemplateLanguagee = args[0];
-            string Source = args[1];
-            string DeploymentId = args[2];
+            Azure.DeploymentType TemplateLanguage = deploymentType;
+            string Source = "github.com/MultiCloudDeployment/terraform-azurerm-automationaccounts.git?ref=1.3.3";
+            string DeploymentId = deploymentId;
 
-            StringBuilder buffer = new StringBuilder();
+            StringBuilder buffer = new();
 
-            switch (TemplateLanguagee.ToLower())
+            switch (TemplateLanguage.Name.ToLower())
             {
                 case "terraform":
                     string ModuleName = "aa-" + this.Name + "-" + DeploymentId;
