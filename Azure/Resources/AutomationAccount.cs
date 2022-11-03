@@ -12,12 +12,11 @@ namespace MCD.Azure.Resources
 {
     public class AutomationAccount
     {
-        const string DefaultSkuName = "Basic";
         const bool DefaultDisableLocalAuth = false;
         const bool DefaultPublicNetworkAccess = true;
         public AutomationAccount()
         {
-            SkuName = DefaultSkuName;
+            SkuName = SkuName.Basic;
             DisableLocalAuth = DefaultDisableLocalAuth;
             PublicNetworkAccess = DefaultPublicNetworkAccess;
         }
@@ -36,16 +35,16 @@ namespace MCD.Azure.Resources
         public string Location { get; set; }
         public List<Tag> Tags { get; set; }
         [Required]
-        [DefaultValue(DefaultSkuName)]
-        private string _SkuName { get; set; }
-        public string SkuName
+        [DefaultValue("Basic")]
+        private SkuName _SkuName { get; set; }
+        public SkuName SkuName
         {
             get => _SkuName;
             set
             {
                 if (value == null)
                 {
-                    _SkuName = DefaultSkuName;
+                    _SkuName = SkuName.Basic;
                 } else
                 {
                     _SkuName = value;
@@ -107,7 +106,7 @@ namespace MCD.Azure.Resources
                         buffer.AppendLine($"  location            = \"{this.Location}\"");
                         buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
                         buffer.AppendLine("");
-                        buffer.AppendLine($"  skuName             = \"{this.SkuName}\"");
+                        buffer.AppendLine($"  skuName             = \"{this.SkuName.Value}\"");
                         buffer.AppendLine("");
                         buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
                         buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
@@ -126,5 +125,12 @@ namespace MCD.Azure.Resources
         {
             return new AutomationAccount(json);
         }
+    }
+    public class SkuName
+    {
+        private SkuName(string value) { Value = value; }
+        public string Value { get; private set; }
+        public static SkuName Basic { get { return new SkuName("Basic"); } }
+        public static SkuName Free { get { return new SkuName("Free"); } }
     }
 }
