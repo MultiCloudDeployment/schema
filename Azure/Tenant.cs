@@ -8,7 +8,10 @@ namespace MCD.Azure
     {
         public Tenant()
         {
-            Subscriptions = new List<Subscription>();
+            Subscriptions = new List<Subscription>()
+            { 
+                new Subscription()
+            };
         }
         public string id { get; set; }
         public string displayName { get; set; }

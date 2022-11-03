@@ -8,7 +8,10 @@ namespace MCD.Azure.Resources
     {
         public Resource()
         {
-            AutomationAccounts = new List<AutomationAccount>();
+            AutomationAccounts = new List<AutomationAccount>()
+            {
+                new AutomationAccount()
+            };
         }
         public List<AutomationAccount> AutomationAccounts { get; set; }
     }
