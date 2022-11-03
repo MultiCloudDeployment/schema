@@ -12,10 +12,14 @@ namespace MCD.Azure.Resources
 {
     public class AutomationAccount
     {
+        const string DefaultSkuName = "Basic";
+        const bool DefaultDisableLocalAuth = false;
+        const bool DefaultPublicNetworkAccess = true;
         public AutomationAccount()
         {
-            DisableLocalAuth = false;
-            PublicNetworkAccess = true;
+            SkuName = DefaultSkuName;
+            DisableLocalAuth = DefaultDisableLocalAuth;
+            PublicNetworkAccess = DefaultPublicNetworkAccess;
         }
         public AutomationAccount(string json)
         {
@@ -32,12 +36,55 @@ namespace MCD.Azure.Resources
         public string Location { get; set; }
         public List<Tag> Tags { get; set; }
         [Required]
-        [DefaultValue("Basic")]
-        public string SkuName { get; set; }
-        [DefaultValue(false)]
-        public bool DisableLocalAuth { get; set; }
-        [DefaultValue(true)]
-        public bool PublicNetworkAccess { get; set; }
+        [DefaultValue(DefaultSkuName)]
+        private string _SkuName { get; set; }
+        public string SkuName
+        {
+            get => _SkuName;
+            set
+            {
+                if (value == null)
+                {
+                    _SkuName = DefaultSkuName;
+                } else
+                {
+                    _SkuName = value;
+                }
+            }
+        }
+        [DefaultValue(DefaultDisableLocalAuth)]
+        private bool? _DisableLocalAuth { get; set; }
+        public bool? DisableLocalAuth
+        {
+            get => _DisableLocalAuth;
+            set
+            {
+                if (value == null)
+                {
+                    _DisableLocalAuth = DefaultDisableLocalAuth;
+                } else
+                {
+                    _DisableLocalAuth = value;
+                }
+            }
+        }
+        [DefaultValue(DefaultPublicNetworkAccess)]
+        private bool? _PublicNetworkAccess { get; set; }
+        public bool? PublicNetworkAccess
+        {
+            get => _PublicNetworkAccess;
+            set
+            {
+                if (value == null)
+                {
+                    _PublicNetworkAccess = DefaultPublicNetworkAccess;
+                }
+                else
+                {
+                    _PublicNetworkAccess = value;
+                }
+            }
+        }
         [Required]
         public string ResourceGroup { get; set; }
         public string ToString(params string[] args)
