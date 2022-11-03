@@ -4,6 +4,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 
 namespace MCD.Azure.Resources
 {
@@ -14,16 +17,21 @@ namespace MCD.Azure.Resources
             DisableLocalAuth = false;
             PublicNetworkAccess = true;
         }
+        public AutomationAccount(string json)
+        {
+            AutomationAccount resource = JsonSerializer.Deserialize<AutomationAccount>(json);
+            foreach (PropertyInfo r in resource.GetType().GetProperties())
+            {
+                PropertyInfo p = GetType().GetProperties().Where(p => p.Name.ToLower() == r.Name.ToLower()).FirstOrDefault();
+                p.SetValue(this, r.GetValue(resource));
+            }
+        }
         [Required]
-        [Display(Name = "name")]
         public string Name { get; set; }
         [Required]
-        [Display(Name = "location")]
         public string Location { get; set; }
-        [Display(Name = "tags")]
         public List<Tag> Tags { get; set; }
         [Required]
-        [Display(Name = "SkuName")]
         [DefaultValue("Basic")]
         public string SkuName { get; set; }
         [DefaultValue(false)]
@@ -66,6 +74,10 @@ namespace MCD.Azure.Resources
             }
 
             return buffer.ToString();
+        }
+        public static explicit operator AutomationAccount(string json)
+        {
+            return new AutomationAccount(json);
         }
     }
 }
