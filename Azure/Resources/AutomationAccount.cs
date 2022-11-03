@@ -19,6 +19,7 @@ namespace MCD.Azure.Resources
             SkuName = Sku.Basic;
             DisableLocalAuth = DefaultDisableLocalAuth;
             PublicNetworkAccess = DefaultPublicNetworkAccess;
+            Tags = new List<Tag>();
         }
         public AutomationAccount(string json)
         {
@@ -110,7 +111,7 @@ namespace MCD.Azure.Resources
                     buffer.AppendLine("");
                     buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
                     buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
-                    if (this.Tags != null)
+                    if (this.Tags.Count > 0)
                     {
                         buffer.AppendLine("");
                         buffer.AppendLine($"  tags                = {this.Tags}");
