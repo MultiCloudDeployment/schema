@@ -97,25 +97,28 @@ namespace MCD.Azure.Resources
             switch (TemplateLanguagee.ToLower())
             {
                 case "terraform":
-                        string ModuleName = "aa-" + this.Name + "-" + DeploymentId;
+                    string ModuleName = "aa-" + this.Name + "-" + DeploymentId;
 
-                        buffer.AppendLine($"module \"{ModuleName}\" {{");
-                        buffer.AppendLine($"  source = \"{Source}\"");
-                        buffer.AppendLine("");
-                        buffer.AppendLine($"  name                = \"{this.Name}\"");
-                        buffer.AppendLine($"  location            = \"{this.Location}\"");
-                        buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
-                        buffer.AppendLine("");
-                        buffer.AppendLine($"  skuName             = \"{this.SkuName.Name}\"");
-                        buffer.AppendLine("");
-                        buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
-                        buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
+                    buffer.AppendLine($"module \"{ModuleName}\" {{");
+                    buffer.AppendLine($"  source = \"{Source}\"");
+                    buffer.AppendLine("");
+                    buffer.AppendLine($"  name                = \"{this.Name}\"");
+                    buffer.AppendLine($"  location            = \"{this.Location}\"");
+                    buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
+                    buffer.AppendLine("");
+                    buffer.AppendLine($"  skuName             = \"{this.SkuName.Name}\"");
+                    buffer.AppendLine("");
+                    buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
+                    buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
+                    if (this.Tags != null)
+                    {
                         buffer.AppendLine("");
                         buffer.AppendLine($"  tags                = {this.Tags}");
                         buffer.AppendLine("");
-                        buffer.AppendLine("}");
+                    }
+                    buffer.AppendLine("}");
                     break;
-                case "arm":
+                case "bicep":
                     break;
             }
 
