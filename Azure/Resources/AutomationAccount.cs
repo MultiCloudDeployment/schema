@@ -114,12 +114,12 @@ namespace MCD.Azure.Resources
             Azure.DeploymentType TemplateLanguage = deploymentType;
             string Source = "github.com/MultiCloudDeployment/terraform-azurerm-automationaccounts.git?ref=1.3.3";
             string DeploymentId = deploymentId;
-
+            
             StringBuilder buffer = new();
 
-            switch (TemplateLanguage.Name.ToLower())
+            switch (TemplateLanguage)
             {
-                case "arm":
+                case Azure.DeploymentType.Arm:
                     buffer.AppendLine("{");
                     buffer.AppendLine(" \"$schema\": \"http://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#\",");
                     buffer.AppendLine(" \"contentVersion\": \"1.0.0.4\",");
@@ -154,7 +154,7 @@ namespace MCD.Azure.Resources
                     buffer.AppendLine(" }");
                     buffer.AppendLine("}");
                     break;
-                case "bicep":
+                case Azure.DeploymentType.Bicep:
                     buffer.AppendLine("module AutomationAccount 'automationaccount.bicep' = {");
                     buffer.AppendLine($"  name: \"{this.Name}-deployment\"");
                     buffer.AppendLine($"  scope: resourceGroup({this.ResourceGroup})");
@@ -171,7 +171,7 @@ namespace MCD.Azure.Resources
                     buffer.AppendLine("  }");
                     buffer.AppendLine("}");
                     break;
-                case "terraform":
+                case Azure.DeploymentType.Terraform:
                     string ModuleName = "aa-" + this.Name + "-" + DeploymentId;
 
                     buffer.AppendLine($"module \"{ModuleName}\" {{");

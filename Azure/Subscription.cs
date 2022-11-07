@@ -10,6 +10,12 @@ namespace MCD.Azure
         {
             Resources = new();
         }
+        public Subscription(Subscription subscription)
+        {
+            this.id = subscription.id;
+            this.displayName = subscription.displayName;
+            Resources = new Resources.Resource(subscription.Resources);
+        }
         public string id { get; set; }
         public string displayName { get; set; }
         public Resources.Resource Resources { get; set; }
