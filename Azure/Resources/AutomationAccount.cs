@@ -23,6 +23,7 @@ namespace MCD.Azure.Resources
     /// </summary>
     public class AutomationAccount
     {
+        const Sku DefaultSkuName = Sku.Basic;
         const bool DefaultDisableLocalAuth = false;
         const bool DefaultPublicNetworkAccess = true;
         public AutomationAccount()
@@ -51,7 +52,7 @@ namespace MCD.Azure.Resources
         public string Location { get; set; }
         public List<Tag> Tags { get; set; }
         [Required]
-        [DefaultValue("Basic")]
+        [DefaultValue(Sku.Basic)]
         private Sku _SkuName { get; set; }
         public Sku SkuName
         {
@@ -140,7 +141,7 @@ namespace MCD.Azure.Resources
                     }
                     buffer.AppendLine("  },");
                     buffer.AppendLine("  \"SkuName\": {");
-                    buffer.AppendLine($"   \"value\": \"{this.SkuName.Name}\"");
+                    buffer.AppendLine($"   \"value\": \"{this.SkuName}\"");
                     buffer.AppendLine("  \"DisableLocalAuth\": {");
                     buffer.AppendLine($"   \"value\": {this.DisableLocalAuth}");
                     buffer.AppendLine("  },");
@@ -166,7 +167,7 @@ namespace MCD.Azure.Resources
                     }
                     buffer.AppendLine($"    DisableLocalAuth: {this.DisableLocalAuth}");
                     buffer.AppendLine($"    PublicNetworkAccess: {this.PublicNetworkAccess}");
-                    buffer.AppendLine($"    SkuName: \"{this.SkuName.Name}\"");
+                    buffer.AppendLine($"    SkuName: \"{this.SkuName}\"");
                     buffer.AppendLine("  }");
                     buffer.AppendLine("}");
                     break;
@@ -180,7 +181,7 @@ namespace MCD.Azure.Resources
                     buffer.AppendLine($"  location            = \"{this.Location}\"");
                     buffer.AppendLine($"  resourceGroup       = azurerm_resource_group.rsg-{this.ResourceGroup}-{DeploymentId}.name");
                     buffer.AppendLine("");
-                    buffer.AppendLine($"  skuName             = \"{this.SkuName.Name}\"");
+                    buffer.AppendLine($"  skuName             = \"{this.SkuName}\"");
                     buffer.AppendLine("");
                     buffer.AppendLine($"  disableLocalAuth    = {this.DisableLocalAuth}");
                     buffer.AppendLine($"  publicNetworkAccess = {this.PublicNetworkAccess}");
@@ -204,12 +205,10 @@ namespace MCD.Azure.Resources
         {
             return new AutomationAccount(json);
         }
-        public class Sku
+        public enum Sku
         {
-            private Sku(string value) { Name = value; }
-            public string Name { get; private set; }
-            public static Sku Basic { get { return new Sku("Basic"); } }
-            public static Sku Free { get { return new Sku("Free"); } }
+            Free,
+            Basic
         }
     }
 }
