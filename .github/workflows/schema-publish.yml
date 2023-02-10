@@ -50,7 +50,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Release]
     runs-on: windows-latest  # For a list of available runner types, refer to
     env:
       Solution_Name: schema.sln
@@ -87,5 +87,7 @@ jobs:
       run: dotnet pack --configuration ${{ matrix.configuration }}
       
     - name: Configure Nuget
-      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/MultiCloudDeployment/index.json -Username MultiCloudDeployment -Password ${{ secrets.GITHUB_TOKEN }}
+      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/MultiCloudDeployment/index.json -Username MultiCloudDeployment -Password ${{ secrets.PUBLISHKEY }}
 
+    - name: Push package to GitHub registry
+      run: nuget push .\schema\schema\bin\$env:Configuration\*.nupkg -Source "GPR" -SkipDuplicate
