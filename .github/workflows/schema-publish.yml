@@ -90,4 +90,4 @@ jobs:
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/MultiCloudDeployment/index.json -Username MultiCloudDeployment -Password ${{ secrets.PUBLISHKEY }}
 
     - name: Push package to GitHub registry
-      run: nuget push .\bin\$env:Configuration\*.nupkg -Source "GPR" -SkipDuplicate
+      run: nuget push .\bin\${{ matrix.configuration }}\*.nupkg -Source "GPR" -SkipDuplicate
